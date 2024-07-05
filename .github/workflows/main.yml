@@ -70,12 +70,17 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.BUILD_RELEASE }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: |
-            ./khoapmd-environment-panel.zip
-            ./khoapmd-environment-panel.md5
-          asset_name: |
-            khoapmd-environment-panel.zip
-            khoapmd-environment-panel.md5
-          asset_content_type: |
-            application/zip
-            text/plain 
+          asset_path: ./khoapmd-environment-panel.zip
+          asset_name: khoapmd-environment-panel.zip
+          asset_content_type: application/zip
+
+      - name: Upload Release Asset MD5
+        id: upload-release-asset-md5
+        uses: actions/upload-release-asset@v1.0.2
+        env:
+          GITHUB_TOKEN: ${{ secrets.BUILD_RELEASE }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./khoapmd-environment-panel.md5
+          asset_name: khoapmd-environment-panel.md5
+          asset_content_type: text/plain
