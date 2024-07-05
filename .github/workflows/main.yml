@@ -1,8 +1,12 @@
 name: Build and Release
 
 on:
-  - push
-  - pull_request
+  push:
+    branches:
+      - main  # Adjust as per your branch name
+  pull_request:
+    branches:
+      - main  # Adjust as per your branch name
 
 jobs:
   cache-and-install:
@@ -19,9 +23,9 @@ jobs:
           run_install: false
 
       - name: Install Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v4  # Update to v2 to match latest version
         with:
-          node-version: 20
+          node-version: '20'  # Adjust to your required Node.js version
           cache: 'pnpm'
 
       - name: Get pnpm store directory
@@ -43,9 +47,14 @@ jobs:
       - name: Build the project
         run: pnpm run build
 
+      - name: Package and Push to Release
+        run: |
+          chmod +x pack.sh
+          ./pack.sh
+
       - name: Create Release
         id: create_release
-        uses: actions/create-release@v1
+        uses: actions/create-release@v4
         env:
           GITHUB_TOKEN: ${{ secrets.BUILD_RELEASE }}
         with:
@@ -54,3 +63,13 @@ jobs:
           draft: false
           prerelease: false
 
+      - name: Upload Release Asset
+        id: upload-release-asset
+        uses: actions/upload-release-asset@v4
+        env:
+          GITHUB_TOKEN: ${{ secrets.BUILD_RELEASE }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./khoapmd-environment-panel.zip  # Adjust path if needed
+          asset_name: khoapmd-environment-panel.zip
+          asset_content_type: application/zip
