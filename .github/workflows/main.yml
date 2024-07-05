@@ -15,10 +15,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      
-      - name: Configure Git
-        run: |
-          git config core.protectNTFS false
 
       - uses: pnpm/action-setup@v4
         name: Install pnpm
