@@ -23,7 +23,7 @@ jobs:
           run_install: false
 
       - name: Install Node.js
-        uses: actions/setup-node@v4  # Update to v2 to match latest version
+        uses: actions/setup-node@v4 
         with:
           node-version: '20'  # Adjust to your required Node.js version
           cache: 'pnpm'
@@ -54,7 +54,7 @@ jobs:
 
       - name: Create Release
         id: create_release
-        uses: actions/create-release@v1
+        uses: actions/create-release@v1.1
         env:
           GITHUB_TOKEN: ${{ secrets.BUILD_RELEASE }}
         with:
@@ -65,7 +65,7 @@ jobs:
 
       - name: Upload Release Asset
         id: upload-release-asset
-        uses: actions/upload-release-asset@v1
+        uses: actions/upload-release-asset@v1.1
         env:
           GITHUB_TOKEN: ${{ secrets.BUILD_RELEASE }}
         with:
