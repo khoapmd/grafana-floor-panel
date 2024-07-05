@@ -48,7 +48,9 @@ jobs:
         run: pnpm run build
       
       - name: Sign Grafana Plugin Private Mode
-        run: npx @grafana/sign-plugin@latest --rootUrls http://localhost:3000
+        run: |
+        export GRAFANA_ACCESS_POLICY_TOKEN
+        npx @grafana/sign-plugin@latest --rootUrls http://localhost:3000
 
       - name: Package and Push to Release
         run: |
