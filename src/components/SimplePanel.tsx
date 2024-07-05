@@ -249,14 +249,6 @@ function animateQualityTransition(
  * @param rh
  * @param voc
  */
-function calculateIAQ(co2: number, temp: number, rh: number, voc: number) {
-    const co2Index = Math.min(6, Math.round(co2 / 400)); // 1 - 6
-    const vocIndex = Math.min(6, Math.round(voc / 50)); // 1 - 6
-    const worstOfTheTwo = Math.max(co2Index, vocIndex);
-    const worst = 6;
-    const aqi = Math.min(Math.max(0, 100.0 - (100 * (co2Index / worst))), 100);
-    return aqi ?? 0.0;
-}
 
 export function parseRooms(svg: string) {
     const parser = new DOMParser();

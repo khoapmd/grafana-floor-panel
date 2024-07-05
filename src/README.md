@@ -1,7 +1,7 @@
 # Floor Plan Indoor Environment Quality Monitoring
 <p style="text-align:center; opacity: 0.5">(soon interactive)</p>
 
-![img.png](https://github.com/khoapmd/grafana-floor-panel/blob/main/src/img/floor-environment.png?raw=true)
+![img.png](https://github.com/khoapmd/grafana-floor-panel/blob/main/src/sample/floor-environment.png?raw=true)
 
 ### Features
 - [x] Environment Quality rendering
