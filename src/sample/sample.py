@@ -3,10 +3,10 @@ from influxdb_client import InfluxDBClient, Point, WritePrecision
 from influxdb_client.client.write_api import SYNCHRONOUS
 import random
 
-token = "your-token"
-org = "my_org"
-bucket = "my_bucket"
-url = "https://influxdb.zerok.cloud"
+token = "token"
+org = "org"
+bucket = "bucket"
+url = "influxdb"
 
 client = influxdb_client.InfluxDBClient(url=url, token=token, org=org)
 
