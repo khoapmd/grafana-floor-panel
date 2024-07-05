@@ -54,7 +54,7 @@ jobs:
 
       - name: Create Release
         id: create_release
-        uses: ncipollo/release-action@v1.14.0
+        uses: actions/create-release@v1.1.4
         env:
           GITHUB_TOKEN: ${{ secrets.BUILD_RELEASE }}
         with:
@@ -65,7 +65,7 @@ jobs:
 
       - name: Upload Release Asset
         id: upload-release-asset
-        uses: Shopify/upload-to-release@v2.0.0
+        uses: actions/upload-release-asset@v1.0.2
         env:
           GITHUB_TOKEN: ${{ secrets.BUILD_RELEASE }}
         with:
