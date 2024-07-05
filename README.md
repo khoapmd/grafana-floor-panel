@@ -1,7 +1,7 @@
 # Floor Plan Indoor Environment Quality Monitoring
 <p style="text-align:center; opacity: 0.5">(soon interactive)</p>
 
-![img.png](https://github.com/khoapmd/grafana-floor-panel/blob/main/src/img/floor-environment.png?raw=true)
+![img.png](https://github.com/khoapmd/grafana-floor-panel/blob/main/img/floor-environment.png?raw=true)
 
 ### Features
 - [x] Environment Quality rendering
@@ -22,7 +22,7 @@ The plugin finds rooms in the provided floor plan SVG by looking for prefix of:
 https://grafana.zerok.cloud/public-dashboards/1e7530530e5a4d01a604903b0379cbbc?orgId=1&refresh=30s
 
 ### Required Data Example (CSV)
-https://github.com/khoapmd/grafana-floor-panel/blob/main/src/sample/sample-data.csv
+https://github.com/khoapmd/grafana-floor-panel/blob/main/sample/sample-data.csv
 
 **Data should be grouped as**
 ```
@@ -41,4 +41,4 @@ from(bucket: "my_bucket")
 ```
 
 #### Sample Floor plan SVG Data
-https://github.com/khoapmd/grafana-floor-panel/blob/main/src/sample/floor-envirnment.svg
+https://github.com/khoapmd/grafana-floor-panel/blob/main/sample/floor-envirnment.svg
