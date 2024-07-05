@@ -1,0 +1,86 @@
+name: Build and Release
+
+on:
+  push:
+    branches:
+      - main  # Adjust as per your branch name
+  pull_request:
+    branches:
+      - main  # Adjust as per your branch name
+
+jobs:
+  cache-and-install:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        name: Install pnpm
+        with:
+          version: 8.9.2
+          run_install: false
+
+      - name: Install Node.js
+        uses: actions/setup-node@v4 
+        with:
+          node-version: '20'  # Adjust to your required Node.js version
+          cache: 'pnpm'
+
+      - name: Get pnpm store directory
+        shell: bash
+        run: |
+          echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+
+      - uses: actions/cache@v4
+        name: Setup pnpm cache
+        with:
+          path: ${{ env.STORE_PATH }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Build the project
+        run: pnpm run build
+
+      - name: Package and Push to Release
+        run: |
+          chmod +x pack.sh
+          ./pack.sh
+
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1.1.4
+        env:
+          GITHUB_TOKEN: ${{ secrets.BUILD_RELEASE }}
+        with:
+          tag_name: v${{ github.sha }}
+          release_name: Release ${{ github.sha }}
+          draft: false
+          prerelease: false
+
+      - name: Upload Release Asset
+        id: upload-release-asset
+        uses: actions/upload-release-asset@v1.0.2
+        env:
+          GITHUB_TOKEN: ${{ secrets.BUILD_RELEASE }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./khoapmd-environment-panel.zip
+          asset_name: khoapmd-environment-panel.zip
+          asset_content_type: application/zip
+
+      - name: Upload Release Asset MD5
+        id: upload-release-asset-md5
+        uses: actions/upload-release-asset@v1.0.2
+        env:
+          GITHUB_TOKEN: ${{ secrets.BUILD_RELEASE }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./khoapmd-environment-panel.md5
+          asset_name: khoapmd-environment-panel.md5
+          asset_content_type: text/plain
