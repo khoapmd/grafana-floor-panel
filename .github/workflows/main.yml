@@ -70,6 +70,12 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.BUILD_RELEASE }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./khoapmd-environment-panel.zip  # Adjust path if needed
-          asset_name: khoapmd-environment-panel.zip
-          asset_content_type: application/zip
+          asset_path: |
+            ./khoapmd-environment-panel.zip
+            ./khoapmd-environment-panel.md5
+          asset_name: |
+            khoapmd-environment-panel.zip
+            khoapmd-environment-panel.md5
+          asset_content_type: |
+            application/zip
+            text/plain 
