@@ -49,7 +49,7 @@ jobs:
       
       - name: Sign Grafana Plugin Private Mode
         run: |
-        export GRAFANA_ACCESS_POLICY_TOKEN
+        export GRAFANA_ACCESS_POLICY_TOKEN=secrets.GRAFANA_ACCESS_POLICY_TOKEN
         npx @grafana/sign-plugin@latest --rootUrls http://localhost:3000
 
       - name: Package and Push to Release
