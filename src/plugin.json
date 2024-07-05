@@ -1,0 +1,38 @@
+{
+  "$schema": "https://raw.githubusercontent.com/grafana/grafana/main/docs/sources/developers/plugins/plugin.schema.json",
+  "type": "panel",
+  "name": "Environment Quality Floor",
+  "id": "khoapmd-environment-panel",
+  "info": {
+    "keywords": [
+      "panel",
+      "floor plan",
+      "air quality",
+      "environment",
+      "humidity",
+      "temperature",
+      "co2"
+    ],
+    "description": "Displays environment quality information on a floor plan.",
+    "author": {
+      "name": "khoapmd"
+    },
+    "logos": {
+      "small": "img/logo.svg",
+      "large": "img/logo.svg"
+    },
+    "links": [],
+    "screenshots": [
+      {
+        "name": "Environment Quality",
+        "path": "img/floor-environment.png"
+      }
+    ],
+    "version": "%VERSION%",
+    "updated": "%TODAY%"
+  },
+  "dependencies": {
+    "grafanaDependency": ">=10.3.3",
+    "plugins": []
+  }
+}
