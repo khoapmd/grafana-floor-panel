@@ -181,11 +181,11 @@ function animateQualityTransition(
             textElement.innerHTML = '';
             // Create tspan for temperature
             const tempTspan = document.createElementNS('http://www.w3.org/2000/svg', 'tspan');
-            tempTspan.textContent = "Disconnected";
+            tempTspan.textContent = "No Data";
             tempTspan.setAttribute("fill", "black");
             const xValue = textElement.getAttribute('x');
             tempTspan.removeAttribute("x");
-            tempTspan.setAttribute('x', (parseFloat(xValue) - 10).toString());
+            tempTspan.setAttribute('x', (parseFloat(xValue) - 0).toString());
             nameElement.setAttribute("fill", "black");
             // Append tspans to text element
             textElement.appendChild(tempTspan);
