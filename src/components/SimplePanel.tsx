@@ -88,7 +88,6 @@ export const SimplePanel: React.FC<Props> = ({ options, data, width, height, fie
 
     const colorsCount = settings.colors.length;
     const firstColor = theme.visualization.getColorByName(settings.colors[0].name);
-    const secondColor = theme.visualization.getColorByName(settings.colors[colorsCount - 2].name);
     const lastColor = theme.visualization.getColorByName(settings.colors[colorsCount - 1].name);
 
     return (
@@ -120,7 +119,7 @@ export const SimplePanel: React.FC<Props> = ({ options, data, width, height, fie
                         style={{
                             borderRadius: '3px',
                             padding: '0.5em',
-                            background: `linear-gradient(90deg, ${firstColor} 0%, ${secondColor} 50%, ${lastColor} 100%)`,
+                            background: `linear-gradient(90deg, ${firstColor} 0%, ${lastColor} 100%)`,
                         }}
                     ></div>
                     <div style={{ display: 'flex', alignItems: 'stretch', justifyContent: 'space-between' }}>
