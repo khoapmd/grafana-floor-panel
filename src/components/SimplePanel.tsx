@@ -124,9 +124,8 @@ export const SimplePanel: React.FC<Props> = ({ options, data, width, height, fie
                         }}
                     ></div>
                     <div style={{ display: 'flex', alignItems: 'stretch', justifyContent: 'space-between' }}>
-                        <span>Low</span>
-                        <span>Good</span>
-                        <span>High</span>
+                        <span>Normal</span>
+                        <span>Abnormal</span>
                     </div>
                 </div>
             </div>
