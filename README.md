@@ -7,7 +7,6 @@
 - [x] Environment Quality rendering
 - [x] Easy configuration and setup
 - [ ] Interactive rooms
-- [ ] Detailed charts of IAQ history.
 
 ### Short description
 Monitoring indoor temperature and humidity through floor plan visualization in Grafana provides valuable insights into the environmental conditions of different areas within a building. By integrating sensors and data collection points throughout the building, Grafana can display real-time and historical temperature and humidity data on a floor plan layout.<br />
@@ -15,8 +14,8 @@ This enables users to easily identify areas with undesirable conditions and take
 
 The plugin finds rooms in the provided floor plan SVG by looking for prefix of:
 - Drawing color: id = `room:` (example: `room:livingroom`)
-- Drawing color: id = `name:` (example: `name:livingroom`) 
-- Drawing color: id = `roomname` (example: `livingroom`) 
+- Drawing room name label: id = `name:` (example: `name:livingroom`) 
+- Drawing number label: id = `roomname` (example: `livingroom`) 
 
 ### Public Dashboard Example
 https://grafana.zerok.cloud/public-dashboards/1e7530530e5a4d01a604903b0379cbbc?orgId=1&refresh=30s
