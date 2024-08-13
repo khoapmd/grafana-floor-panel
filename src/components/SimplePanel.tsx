@@ -54,6 +54,7 @@ export const SimplePanel: React.FC<Props> = ({ options, data, width, height, fie
         console.log('data.series')
         console.log(data.series)
         const measurements: SensorData[] = mapData(data.series as unknown as Series[]);
+        console.log(measurements)
         const sensorMappings: Map<string, string> = new Map(options.sensorMappings ? JSON.parse(options.sensorMappings) : []);
         for (let sensorData of measurements) {
             const room = sensorMappings.get(sensorData.id);
