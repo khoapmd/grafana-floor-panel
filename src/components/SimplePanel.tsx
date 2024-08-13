@@ -70,7 +70,12 @@ export const SimplePanel: React.FC<Props> = ({ options, data, width, height, fie
 
     clearInterval(interval.id);
     if (container) {
-        interval.id = window.setInterval(() => animateQualityTransition(id, rainbow, settings.colors, container, rooms, roomMetrics, interval.id), 50);
+        interval.id = window.setInterval(() => {
+            if(options.colorMode){
+                animateQualityTransition(id, rainbow, settings.colors, container, rooms, roomMetrics, interval.id)
+            }
+            
+        }, 50);
     }
 
     const svgRef = useCallback(
