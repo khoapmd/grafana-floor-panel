@@ -130,17 +130,52 @@ export const SimplePanel: React.FC<Props> = ({ options, data, width, height, fie
                             </div></>
 
                     ) : (
-                        <><div
-                            style={{
-                                borderRadius: '3px',
-                                padding: '0.5em',
-                                backgroundColor: getSolidColorForQuality(50), // Use a representative value or implement a logic
-                            }}
-                        ></div><div style={{ display: 'flex', alignItems: 'stretch', justifyContent: 'space-between' }}>
-                                <span>Low</span>
-                                <span>Normal</span>
-                                <span>High</span>
-                            </div></>
+                        <>
+                        <div style={{ display: 'flex', alignItems: 'stretch', justifyContent: 'space-between' }}>
+                            <div
+                                style={{
+                                    borderRadius: '3px',
+                                    padding: '0.5em',
+                                    backgroundColor: 'rgb(86, 166, 75)'
+                                }}
+                            ></div>
+                            <div
+                                style={{
+                                    borderRadius: '3px',
+                                    padding: '0.5em',
+                                    backgroundColor: 'rgb(255, 99, 71)' // example color
+                                }}
+                            ></div>
+                            <div
+                                style={{
+                                    borderRadius: '3px',
+                                    padding: '0.5em',
+                                    backgroundColor: 'rgb(30, 144, 255)' // example color
+                                }}
+                            ></div>
+                            <div
+                                style={{
+                                    borderRadius: '3px',
+                                    padding: '0.5em',
+                                    backgroundColor: 'rgb(255, 215, 0)' // example color
+                                }}
+                            ></div>
+                            <div
+                                style={{
+                                    borderRadius: '3px',
+                                    padding: '0.5em',
+                                    backgroundColor: 'rgb(128, 0, 128)' // example color
+                                }}
+                            ></div>
+                        </div>
+                        <div style={{ display: 'flex', alignItems: 'stretch', justifyContent: 'space-between' }}>
+                            <span>Running</span>
+                            <span>Line Down</span>
+                            <span>Change Over</span>
+                            <span>No Plan</span>
+                            <span>NPD</span>
+                        </div>
+                    </>
                     )}
                 </div>
             </div>
