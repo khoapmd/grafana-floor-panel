@@ -53,20 +53,27 @@ export const SimplePanel: React.FC<Props> = ({ options, data, width, height, fie
         setLastUpdate(now());
         console.log('data.series')
         console.log(data.series)
-        const measurements: SensorData[] = mapData(data.series as unknown as Series[]);
-        console.log(measurements)
-        const sensorMappings: Map<string, string> = new Map(options.sensorMappings ? JSON.parse(options.sensorMappings) : []);
-        for (let sensorData of measurements) {
-            const room = sensorMappings.get(sensorData.id);
-            if (!room) continue;
-            const values = sensorData.values;
-            const normalized = values.get('normalized');
-            const temperature = values.get('temperature');
-            const humidity = values.get('humidity');
-            if (normalized !== undefined && temperature !== undefined && humidity !== undefined) {
-                roomMetrics.set(room, { normalized, temperature, humidity });
+        if(options.colorMode){
+            const measurements: SensorData[] = mapData(data.series as unknown as Series[]);
+            console.log(measurements)
+            const sensorMappings: Map<string, string> = new Map(options.sensorMappings ? JSON.parse(options.sensorMappings) : []);
+            for (let sensorData of measurements) {
+                const room = sensorMappings.get(sensorData.id);
+                if (!room) continue;
+                const values = sensorData.values;
+                const normalized = values.get('normalized');
+                const temperature = values.get('temperature');
+                const humidity = values.get('humidity');
+                if (normalized !== undefined && temperature !== undefined && humidity !== undefined) {
+                    roomMetrics.set(room, { normalized, temperature, humidity });
+                }
             }
         }
+        else {
+            const measurements: SensorData[] = mapData2(data.series as unknown as Series[]);
+            console.log(measurements)
+        }
+        
     }
 
     clearInterval(interval.id);
@@ -207,6 +214,22 @@ export function mapData(series: Series[]) {
             return { id: sensorId, values: valueMap, time: time } as SensorData;
         })
         .filter((x) => x) as SensorData[];
+}
+
+export function mapData2(series: Series[]): SensorData[] {
+    return series
+    .map((s) => {
+        const time = s.fields.find((x) => x.name === 'timestamp (last)')?.values?.get(0) as number ?? Date.now();;
+        const sensorId = s.fields.find((x) => x.name === 'line');
+        if (!sensorId) return null;
+        const fieldValues = s.fields.find((x) => x.name === 'number (last)')?.values ?? [];
+        const valueMap = new Map<string, number>();
+        
+        valueMap.set('normalized', parseFloat(fieldValues[0]));
+        
+        return { id: sensorId, values: valueMap, time: time } as unknown as SensorData;
+    })
+    .filter((x) => x) as SensorData[];
 }
 
 
