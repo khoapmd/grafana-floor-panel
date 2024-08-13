@@ -116,18 +116,32 @@ export const SimplePanel: React.FC<Props> = ({ options, data, width, height, fie
 
             <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                 <div style={{ maxWidth: '300px', width: '80%' }}>
-                    <div
-                        style={{
-                            borderRadius: '3px',
-                            padding: '0.5em',
-                            background: `linear-gradient(90deg, ${firstColor} 0%, ${secondColor} 50%, ${lastColor} 100%)`,
-                        }}
-                    ></div>
-                    <div style={{ display: 'flex', alignItems: 'stretch', justifyContent: 'space-between' }}>
-                        <span>Low</span>
-                        <span>Normal</span>
-                        <span>High</span>
-                    </div>
+                    {options.colorMode ? (
+                        <><div
+                            style={{
+                                borderRadius: '3px',
+                                padding: '0.5em',
+                                background: `linear-gradient(90deg, ${firstColor} 0%, ${secondColor} 50%, ${lastColor} 100%)`,
+                            }}
+                        ></div><div style={{ display: 'flex', alignItems: 'stretch', justifyContent: 'space-between' }}>
+                                <span>Low</span>
+                                <span>Normal</span>
+                                <span>High</span>
+                            </div></>
+
+                    ) : (
+                        <><div
+                            style={{
+                                borderRadius: '3px',
+                                padding: '0.5em',
+                                backgroundColor: getSolidColorForQuality(50), // Use a representative value or implement a logic
+                            }}
+                        ></div><div style={{ display: 'flex', alignItems: 'stretch', justifyContent: 'space-between' }}>
+                                <span>Low</span>
+                                <span>Normal</span>
+                                <span>High</span>
+                            </div></>
+                    )}
                 </div>
             </div>
         </div>
@@ -176,7 +190,7 @@ function animateQualityTransition(
         // Find the element with the modified ID
         const nameElement = container.querySelector(`#${escapedId} tspan`);
         const textElement = container.querySelector(`#${CSS.escape(room.name.replace(/\./g, "\\."))} tspan`);
-        if (!metric){
+        if (!metric) {
             // Clear existing content
             textElement.innerHTML = '';
             // Create tspan for temperature
@@ -190,7 +204,7 @@ function animateQualityTransition(
             // Append tspans to text element
             textElement.appendChild(tempTspan);
             return false;
-        } 
+        }
         return metric.normalized !== room.quality;
     });
     redrawNeeded.forEach((room) => {
@@ -221,7 +235,7 @@ function animateQualityTransition(
                 const tempTspan = document.createElementNS('http://www.w3.org/2000/svg', 'tspan');
                 // Create tspan for humidity
                 const humTspan = document.createElementNS('http://www.w3.org/2000/svg', 'tspan');
-                
+
                 tempTspan.textContent = `${temperature}°C`;
                 humTspan.textContent = `${humidity}%`;
                 tempTspan.setAttribute('fill', 'while')
@@ -270,4 +284,17 @@ function createOrModifyRadialGradient(id: number, container: SVGElement, rightCo
     <stop offset="0.1" stop-color="transparent" />
     <stop offset="1" stop-color="#${rightColor.name}" />
     `;
+}
+/**
+ * Gets a solid color for a given quality level
+ * @param quality
+ */
+function getSolidColorForQuality(quality: number): string {
+    if (quality < 30) {
+        return 'red';
+    } else if (quality < 60) {
+        return 'yellow';
+    } else {
+        return 'green';
+    }
 }

@@ -6,6 +6,12 @@ import {RoomSensorPicker} from "./components/RoomSensorPicker";
 export const plugin = new PanelPlugin<SimpleOptions>(SimplePanel)
         .useFieldConfig()
         .setPanelOptions(builder => {
+            builder.addBooleanSwitch({
+                path: 'colorMode',
+                name: 'Use Gradient Color',
+                defaultValue: true,
+                category: ["Floor Plan"],
+              })
             builder.addTextInput({
                 name: "Floor plan SVG",
                 path: "svg",
