@@ -51,6 +51,8 @@ export const SimplePanel: React.FC<Props> = ({ options, data, width, height, fie
 
     if (now() - lastUpdate > 3000) {
         setLastUpdate(now());
+        console.log('data.series')
+        console.log(data.series)
         const measurements: SensorData[] = mapData(data.series as unknown as Series[]);
         const sensorMappings: Map<string, string> = new Map(options.sensorMappings ? JSON.parse(options.sensorMappings) : []);
         for (let sensorData of measurements) {
@@ -200,6 +202,7 @@ export function mapData(series: Series[]) {
         })
         .filter((x) => x) as SensorData[];
 }
+
 
 /**
  * Slowly and smoothly recolors rooms to avoid flickering
