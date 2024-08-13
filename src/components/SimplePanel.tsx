@@ -115,7 +115,7 @@ export const SimplePanel: React.FC<Props> = ({ options, data, width, height, fie
             ></div>
 
             <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                <div style={{ maxWidth: '300px', width: '80%' }}>
+                <div style={{ maxWidth: '500px', width: '80%' }}>
                     {options.colorMode ? (
                         <><div
                             style={{
