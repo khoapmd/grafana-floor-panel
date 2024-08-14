@@ -216,20 +216,45 @@ export function mapData(series: Series[]) {
         .filter((x) => x) as SensorData[];
 }
 
+// export function mapData2(series: Series[]): SensorData[] {
+//     return series
+//     .map((s) => {
+//         const time = s.fields.find((x) => x.name === 'timestamp (last)')?.values?.get(0) as number ?? Date.now();;
+//         const sensorId = s.fields.find((x) => x.name === 'line');
+//         if (!sensorId) return null;
+//         const fieldValues = s.fields.find((x) => x.name === 'number (last)')?.values ?? [];
+//         const valueMap = new Map<string, number>();
+        
+//         valueMap.set('normalized', parseFloat(fieldValues[0]));
+        
+//         return { id: sensorId, values: valueMap, time: time } as unknown as SensorData;
+//     })
+//     .filter((x) => x) as SensorData[];
+// }
 export function mapData2(series: Series[]): SensorData[] {
-    return series
-    .map((s) => {
-        const time = s.fields.find((x) => x.name === 'timestamp (last)')?.values?.get(0) as number ?? Date.now();;
-        const sensorId = s.fields.find((x) => x.name === 'line');
-        if (!sensorId) return null;
-        const fieldValues = s.fields.find((x) => x.name === 'number (last)')?.values ?? [];
-        const valueMap = new Map<string, number>();
+    return series.flatMap((s) => {
+        const timestamps = s.fields.find((x) => x.name === 'timestamp (last)')?.values as number[] ?? [];
+        const sensorIds = s.fields.find((x) => x.name === 'line')?.values as string[] ?? [];
+        const fieldValues = s.fields.find((x) => x.name === 'number (last)')?.values as number[] ?? [];
+
+        // Ensure all arrays are the same length
+        const length = Math.min(timestamps.length, sensorIds.length, fieldValues.length);
+
+        const result: SensorData[] = [];
         
-        valueMap.set('normalized', parseFloat(fieldValues[0]));
-        
-        return { id: sensorId, values: valueMap, time: time } as unknown as SensorData;
-    })
-    .filter((x) => x) as SensorData[];
+        for (let i = 0; i < length; i++) {
+            const valueMap = new Map<string, number>();
+            valueMap.set('normalized', parseFloat(fieldValues[i].toString()));
+
+            result.push({
+                id: sensorIds[i],
+                values: valueMap,
+                time: timestamps[i],
+            } as SensorData);
+        }
+
+        return result;
+    });
 }
 
 
