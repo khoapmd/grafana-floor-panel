@@ -51,11 +51,11 @@ export const SimplePanel: React.FC<Props> = ({ options, data, width, height, fie
 
     if (now() - lastUpdate > 3000) {
         setLastUpdate(now());
-        console.log('data.series')
-        console.log(data.series)
+        //console.log('data.series')
+        //console.log(data.series)
         if(options.colorMode){
             const measurements: SensorData[] = mapData(data.series as unknown as Series[]);
-            console.log(measurements)
+            //console.log(measurements)
             const sensorMappings: Map<string, string> = new Map(options.sensorMappings ? JSON.parse(options.sensorMappings) : []);
             for (let sensorData of measurements) {
                 const room = sensorMappings.get(sensorData.id);
@@ -71,7 +71,7 @@ export const SimplePanel: React.FC<Props> = ({ options, data, width, height, fie
         }
         else {
             const measurements: SensorData[] = mapData2(data.series as unknown as Series[]);
-            console.log(measurements)
+            //console.log(measurements)
             const sensorMappings: Map<string, string> = new Map(options.sensorMappings ? JSON.parse(options.sensorMappings) : []);
             for (let sensorData of measurements) {
                 const room = sensorMappings.get(sensorData.id);
@@ -211,7 +211,8 @@ export const SimplePanel: React.FC<Props> = ({ options, data, width, height, fie
 export function mapData(series: Series[]) {
     return series
         .map((s) => {
-            const time = (s.fields.find((x) => x.name === '_time')?.values as number[])[0] ?? Date.now();
+            //const time = (s.fields.find((x) => x.name === '_time')?.values as number[])[0] ?? Date.now();
+            const time = s.fields.find((x) => x.name === '_time')?.values?.get(0) as number ?? Date.now();
             const fieldOrder = s.fields.find((x) => x.name === '_field');
             if (!fieldOrder) return null;
             const fields = fieldOrder.values;
