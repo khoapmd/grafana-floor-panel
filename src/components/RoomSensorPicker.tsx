@@ -2,7 +2,7 @@ import React from "react";
 import {StandardEditorProps} from "@grafana/data";
 import {Select} from "@grafana/ui";
 import {SensorData, Series} from "../@types/QueryData";
-import {mapData, parseRooms} from "./SimplePanel";
+import {mapData, mapData2, parseRooms} from "./SimplePanel";
 
 export const RoomSensorPicker = ({value, onChange, context}: StandardEditorProps<string>) => {
     const options = context?.options;
@@ -11,7 +11,7 @@ export const RoomSensorPicker = ({value, onChange, context}: StandardEditorProps
         return <div>No sensors detected yet!</div>
     }
     const roomNames = parseRooms(options.svg);
-    const sensorData: SensorData[] = mapData(series)
+    const sensorData: SensorData[] = options.colorMode ? mapData(series) : mapData2(series);
     const sensorNames = [...new Set(sensorData.map(x => x.id))].map((id, index) => ({label: id, value: id, key: index}))
     const map: Map<string, string> = new Map(value ? JSON.parse(value as string) : []);
     const update = (room: string, sensor: string | undefined) => {
