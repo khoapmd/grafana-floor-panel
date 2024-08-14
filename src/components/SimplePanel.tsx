@@ -72,6 +72,16 @@ export const SimplePanel: React.FC<Props> = ({ options, data, width, height, fie
         else {
             const measurements: SensorData[] = mapData2(data.series as unknown as Series[]);
             console.log(measurements)
+            const sensorMappings: Map<string, string> = new Map(options.sensorMappings ? JSON.parse(options.sensorMappings) : []);
+            for (let sensorData of measurements) {
+                const room = sensorMappings.get(sensorData.id);
+                if (!room) continue;
+                const values = sensorData.values;
+                const normalized = values.get('normalized');
+                if (normalized !== undefined) {
+                    roomMetrics.set(room, { normalized, temperature: 0.0, humidity: 0.0 });
+                }
+            }
         }
         
     }
