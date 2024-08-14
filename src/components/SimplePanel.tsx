@@ -79,9 +79,9 @@ export const SimplePanel: React.FC<Props> = ({ options, data, width, height, fie
     clearInterval(interval.id);
     if (container) {
         interval.id = window.setInterval(() => {
-            if(options.colorMode){
+            //if(options.colorMode){
                 animateQualityTransition(id, rainbow, settings.colors, container, rooms, roomMetrics, interval.id)
-            }
+            //}
             
         }, 50);
     }
@@ -201,7 +201,7 @@ export const SimplePanel: React.FC<Props> = ({ options, data, width, height, fie
 export function mapData(series: Series[]) {
     return series
         .map((s) => {
-            const time = s.fields.find((x) => x.name === '_time')?.values?.get(0) as number ?? Date.now();
+            const time = (s.fields.find((x) => x.name === '_time')?.values as number[])[0] ?? Date.now();
             const fieldOrder = s.fields.find((x) => x.name === '_field');
             if (!fieldOrder) return null;
             const fields = fieldOrder.values;
@@ -282,19 +282,25 @@ function animateQualityTransition(
         // Find the element with the modified ID
         const nameElement = container.querySelector(`#${escapedId} tspan`);
         const textElement = container.querySelector(`#${CSS.escape(room.name.replace(/\./g, "\\."))} tspan`);
+        
         if (!metric) {
-            // Clear existing content
-            textElement.innerHTML = '';
-            // Create tspan for temperature
-            const tempTspan = document.createElementNS('http://www.w3.org/2000/svg', 'tspan');
-            tempTspan.textContent = "No Data";
-            tempTspan.setAttribute("fill", "black");
-            const xValue = textElement.getAttribute('x');
-            tempTspan.removeAttribute("x");
-            tempTspan.setAttribute('x', (parseFloat(xValue) - 0).toString());
-            nameElement.setAttribute("fill", "black");
-            // Append tspans to text element
-            textElement.appendChild(tempTspan);
+            if (textElement && nameElement) {
+               // Clear existing content
+                textElement.innerHTML = '';
+                // Create tspan for temperature
+                const tempTspan = document.createElementNS('http://www.w3.org/2000/svg', 'tspan');
+                tempTspan.textContent = "No Data";
+                tempTspan.setAttribute("fill", "black");
+                const xValue = textElement.getAttribute('x');
+                tempTspan.removeAttribute("x");
+                if (xValue !== null) {
+                    tempTspan.setAttribute('x', (parseFloat(xValue) - 0).toString());
+                }
+                nameElement.setAttribute("fill", "black");
+                // Append tspans to text element
+                textElement.appendChild(tempTspan);
+            }
+            
             return false;
         }
         return metric.normalized !== room.quality;
@@ -335,12 +341,54 @@ function animateQualityTransition(
 
                 // Set the x attribute of humTspan to be the same as tempTspan
                 const xValue = textElement.getAttribute('x');
-                humTspan.setAttribute('x', xValue);
+                if (xValue !== null){
+                    humTspan.setAttribute('x', xValue);
+                }
                 humTspan.setAttribute('dy', '1.2em'); // Move to the next line
 
                 // Append tspans to text element
                 textElement.appendChild(tempTspan);
                 textElement.appendChild(humTspan);
+            }
+        });
+    if (redrawNeeded.length === 0) {
+        clearInterval(intervalId);
+    }
+}
+
+function animateQualityTransition2(
+    id: number,
+    rainbow: Rainbow,
+    colors: Color[],
+    container: SVGElement,
+    rooms: Room[],
+    roomMetrics: Map<string, { normalized: number; temperature: number; humidity: number }>,
+    intervalId: number
+) {
+    const redrawNeeded = rooms.filter((room) => {
+        const metric = roomMetrics.get(room.name);
+        if (!metric) {
+            return false;
+        }
+        return metric.normalized !== room.quality;
+    });
+    redrawNeeded.forEach((room) => {
+        const desiredIAQ = roomMetrics.get(room.name)?.normalized;
+        if (desiredIAQ !== undefined) {
+            const difference = Math.abs(desiredIAQ - room.quality);
+            const add = desiredIAQ > room.quality ? 1 : -1;
+            room.quality += add * Math.min(difference, 1);
+        }
+    });
+    rooms
+        .filter((r) => roomMetrics.get(r.name))
+        .forEach((room) => {
+            const roomElement = container.querySelector(`#room\\:${room.name.replace(/\./g, '\\.')}`);
+
+            if (roomElement) {
+                createOrModifyRadialGradient(id, container, { name: rainbow.colorAt(room.quality), value: 0 }, room);
+                roomElement.setAttribute('fill', `url(#rg-${id}-${room.name})`);
+                roomElement.setAttribute('fill-opacity', '1');
             }
         });
     if (redrawNeeded.length === 0) {
@@ -376,17 +424,4 @@ function createOrModifyRadialGradient(id: number, container: SVGElement, rightCo
     <stop offset="0.1" stop-color="transparent" />
     <stop offset="1" stop-color="#${rightColor.name}" />
     `;
-}
-/**
- * Gets a solid color for a given quality level
- * @param quality
- */
-function getSolidColorForQuality(quality: number): string {
-    if (quality < 30) {
-        return 'red';
-    } else if (quality < 60) {
-        return 'yellow';
-    } else {
-        return 'green';
-    }
 }
