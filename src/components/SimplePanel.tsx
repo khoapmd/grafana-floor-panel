@@ -125,6 +125,12 @@ export const SimplePanel: React.FC<Props> = ({ options, data, width, height, fie
     const fourthColor = getColor(colorsCount - 2);
     const lastColor = getColor(colorsCount - 1);
 
+    const colors = options.thresholds.steps.map(step => step.color);
+    const values = options.thresholds.steps.map(step => step.value);
+
+    console.log(colors)
+    console.log(values)
+
     return (
         <div
             style={{
