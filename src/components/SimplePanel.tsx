@@ -344,8 +344,14 @@ function animateQualityTransition(
                     // Use direct coloring without rainbow
                     const metric = roomMetrics.get(room.name);
                     if (metric) {
-                        const colorIndex = Math.floor(metric.normalized);
-                        const color = colors[colorIndex] ? colors[colorIndex].name : 'grey';
+                        const normalizedValue = metric.normalized;
+                        let color = 'grey';  // Default color
+                        for (let i = 0; i < colors.length; i++) {
+                            if (normalizedValue <= colors[i].value * 100) {
+                                color = colors[i].name;
+                                break;
+                            }
+                        }
                         roomElement.setAttribute('fill', color);
                     }
                 }
