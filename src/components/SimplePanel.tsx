@@ -422,7 +422,7 @@ function getColorForValue(normalizedValue: number, colors: Color[]){
     }
 
     // Calculate the index for the color
-    const index = Math.floor(normalizedValue / 20);
+    const index = Math.floor(normalizedValue / 25);
 
     // Ensure the index is within the bounds of the colors array
     if (index < 0) {
