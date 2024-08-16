@@ -113,12 +113,17 @@ export const SimplePanel: React.FC<Props> = ({ options, data, width, height, fie
         [options]
     );
 
-    const colorsCount = settings.colors.length;
-    const firstColor = theme.visualization.getColorByName(settings.colors[0].name);
-    const secondColor = theme.visualization.getColorByName(settings.colors[colorsCount - 2].name);
-    const thirdColor = theme.visualization.getColorByName(settings.colors[colorsCount - 3].name);
-    const fourthColor = theme.visualization.getColorByName(settings.colors[colorsCount - 4].name);
-    const lastColor = theme.visualization.getColorByName(settings.colors[colorsCount - 1].name);
+    const colorsCount = settings.colors?.length ?? 0;
+
+    const getColor = (index: number, defaultColor: string = 'grey') => {
+        return index >= 0 && index < colorsCount ? theme.visualization.getColorByName(settings.colors[index].name) : defaultColor;
+    };
+
+    const firstColor = getColor(0);
+    const secondColor = getColor(colorsCount - 2);
+    const thirdColor = getColor(colorsCount - 3);
+    const fourthColor = getColor(colorsCount - 4);
+    const lastColor = getColor(colorsCount - 1);
 
     return (
         <div
