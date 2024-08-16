@@ -55,7 +55,7 @@ export const SimplePanel: React.FC<Props> = ({ options, data, width, height, fie
         setLastUpdate(now());
         //console.log('data.series')
         //console.log(data.series)
-        if(options.gradientMode){
+        if (options.gradientMode) {
             const measurements: SensorData[] = mapData(data.series as unknown as Series[]);
             //console.log(measurements)
             const sensorMappings: Map<string, string> = new Map(options.sensorMappings ? JSON.parse(options.sensorMappings) : []);
@@ -85,16 +85,16 @@ export const SimplePanel: React.FC<Props> = ({ options, data, width, height, fie
                 }
             }
         }
-        
+
     }
 
     clearInterval(interval.id);
     if (container) {
         interval.id = window.setInterval(() => {
             //if(options.gradientMode){
-                animateQualityTransition(id, rainbow, settings.colors, container, rooms, roomMetrics, interval.id, options)
+            animateQualityTransition(id, rainbow, settings.colors, container, rooms, roomMetrics, interval.id, options)
             //}
-            
+
         }, 50);
     }
 
@@ -165,61 +165,61 @@ export const SimplePanel: React.FC<Props> = ({ options, data, width, height, fie
 
                     ) : (
                         <>
-                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                            <div
-                                style={{
-                                    borderRadius: '3px',
-                                    padding: '0.5em',
-                                    backgroundColor: firstColor,
-                                    flex: '1',
-                                    marginInline: '1em'
-                                }}
-                            ></div>
-                            <div
-                                style={{
-                                    borderRadius: '3px',
-                                    padding: '0.5em',
-                                    backgroundColor: secondColor,
-                                    flex: '1',
-                                    marginInline: '1em'
-                                }}
-                            ></div>
-                            <div
-                                style={{
-                                    borderRadius: '3px',
-                                    padding: '0.5em',
-                                    backgroundColor: thirdColor, 
-                                    flex: '1',
-                                    marginInline: '1em'
-                                }}
-                            ></div>
-                            <div
-                                style={{
-                                    borderRadius: '3px',
-                                    padding: '0.5em',
-                                    backgroundColor: fourthColor,
-                                    flex: '1',
-                                    marginInline: '1em'
-                                }}
-                            ></div>
-                            <div
-                                style={{
-                                    borderRadius: '3px',
-                                    padding: '0.5em',
-                                    backgroundColor: lastColor,
-                                    flex: '1',
-                                    marginInline: '1em'
-                                }}
-                            ></div>
-                        </div>
-                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '0.5em' }}>
-                            <span style={{ flex: '1', textAlign: 'center' }}>Running</span>
-                            <span style={{ flex: '1', textAlign: 'center' }}>Line Down</span>
-                            <span style={{ flex: '1', textAlign: 'center' }}>Change Over</span>
-                            <span style={{ flex: '1', textAlign: 'center' }}>No Plan</span>
-                            <span style={{ flex: '1', textAlign: 'center' }}>NPD</span>
-                        </div>
-                    </>
+                            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                                <div
+                                    style={{
+                                        borderRadius: '3px',
+                                        padding: '0.5em',
+                                        backgroundColor: firstColor,
+                                        flex: '1',
+                                        marginInline: '1em'
+                                    }}
+                                ></div>
+                                <div
+                                    style={{
+                                        borderRadius: '3px',
+                                        padding: '0.5em',
+                                        backgroundColor: secondColor,
+                                        flex: '1',
+                                        marginInline: '1em'
+                                    }}
+                                ></div>
+                                <div
+                                    style={{
+                                        borderRadius: '3px',
+                                        padding: '0.5em',
+                                        backgroundColor: thirdColor,
+                                        flex: '1',
+                                        marginInline: '1em'
+                                    }}
+                                ></div>
+                                <div
+                                    style={{
+                                        borderRadius: '3px',
+                                        padding: '0.5em',
+                                        backgroundColor: fourthColor,
+                                        flex: '1',
+                                        marginInline: '1em'
+                                    }}
+                                ></div>
+                                <div
+                                    style={{
+                                        borderRadius: '3px',
+                                        padding: '0.5em',
+                                        backgroundColor: lastColor,
+                                        flex: '1',
+                                        marginInline: '1em'
+                                    }}
+                                ></div>
+                            </div>
+                            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '0.5em' }}>
+                                <span style={{ flex: '1', textAlign: 'center' }}>Running</span>
+                                <span style={{ flex: '1', textAlign: 'center' }}>Line Down</span>
+                                <span style={{ flex: '1', textAlign: 'center' }}>Change Over</span>
+                                <span style={{ flex: '1', textAlign: 'center' }}>No Plan</span>
+                                <span style={{ flex: '1', textAlign: 'center' }}>NPD</span>
+                            </div>
+                        </>
                     )}
                 </div>
             </div>
@@ -256,7 +256,7 @@ export function mapData2(series: Series[]): SensorData[] {
         const length = Math.min(timestamps.length, sensorIds.length, fieldValues.length);
 
         const result: SensorData[] = [];
-        
+
         for (let i = 0; i < length; i++) {
             const valueMap = new Map<string, number>();
             valueMap.set('normalized', parseFloat(fieldValues[i].toString()));
@@ -298,10 +298,10 @@ function animateQualityTransition(
         // Find the element with the modified ID
         const nameElement = container.querySelector(`#${escapedId} tspan`);
         const textElement = container.querySelector(`#${CSS.escape(room.name.replace(/\./g, "\\."))} tspan`);
-        
+
         if (!metric) {
             if (textElement && nameElement) {
-               // Clear existing content
+                // Clear existing content
                 textElement.innerHTML = '';
                 // Create tspan for temperature
                 const tempTspan = document.createElementNS('http://www.w3.org/2000/svg', 'tspan');
@@ -316,7 +316,7 @@ function animateQualityTransition(
                 // Append tspans to text element
                 textElement.appendChild(tempTspan);
             }
-            
+
             return false;
         }
         return metric.normalized !== room.quality;
@@ -369,7 +369,7 @@ function animateQualityTransition(
 
                 // Set the x attribute of humTspan to be the same as tempTspan
                 const xValue = textElement.getAttribute('x');
-                if (xValue !== null){
+                if (xValue !== null) {
                     humTspan.setAttribute('x', xValue);
                 }
                 humTspan.setAttribute('dy', '1.2em'); // Move to the next line
@@ -414,7 +414,7 @@ function createOrModifyRadialGradient(id: number, container: SVGElement, rightCo
     `;
 }
 
-function getColorForValue(normalizedValue: number, colors: Color[]){
+function getColorForValue(normalizedValue: number, colors: Color[]) {
 
     // Ensure the colors array is not empty
     if (colors.length === 0) {
