@@ -120,9 +120,9 @@ export const SimplePanel: React.FC<Props> = ({ options, data, width, height, fie
     };
 
     const firstColor = getColor(0);
-    const secondColor = getColor(colorsCount - 2);
+    const secondColor = getColor(colorsCount - 4);
     const thirdColor = getColor(colorsCount - 3);
-    const fourthColor = getColor(colorsCount - 4);
+    const fourthColor = getColor(colorsCount - 2);
     const lastColor = getColor(colorsCount - 1);
 
     return (
