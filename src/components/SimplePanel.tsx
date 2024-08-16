@@ -401,3 +401,4 @@ function createOrModifyRadialGradient(id: number, container: SVGElement, rightCo
     <stop offset="1" stop-color="#${rightColor.name}" />
     `;
 }
+
