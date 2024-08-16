@@ -7,6 +7,8 @@ import { Room } from '../@types/Graphics';
 import Rainbow from 'rainbowvis.js';
 import { now } from 'lodash';
 import DOMPurify from 'dompurify';
+import { Options } from '@emotion/css/types/create-instance';
+import { SimpleOptions } from 'types';
 
 type Color = {
     name: string;
@@ -90,7 +92,7 @@ export const SimplePanel: React.FC<Props> = ({ options, data, width, height, fie
     if (container) {
         interval.id = window.setInterval(() => {
             //if(options.colorMode){
-                animateQualityTransition(id, rainbow, settings.colors, container, rooms, roomMetrics, interval.id)
+                animateQualityTransition(id, rainbow, settings.colors, container, rooms, roomMetrics, interval.id, options)
             //}
             
         }, 50);
@@ -114,6 +116,8 @@ export const SimplePanel: React.FC<Props> = ({ options, data, width, height, fie
     const colorsCount = settings.colors.length;
     const firstColor = theme.visualization.getColorByName(settings.colors[0].name);
     const secondColor = theme.visualization.getColorByName(settings.colors[colorsCount - 2].name);
+    const thirdColor = theme.visualization.getColorByName(settings.colors[colorsCount - 3].name);
+    const fourthColor = theme.visualization.getColorByName(settings.colors[colorsCount - 4].name);
     const lastColor = theme.visualization.getColorByName(settings.colors[colorsCount - 1].name);
 
     return (
@@ -156,49 +160,58 @@ export const SimplePanel: React.FC<Props> = ({ options, data, width, height, fie
 
                     ) : (
                         <>
-                        <div style={{ display: 'flex', alignItems: 'stretch', justifyContent: 'space-between' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                             <div
                                 style={{
                                     borderRadius: '3px',
                                     padding: '0.5em',
-                                    backgroundColor: 'rgb(86, 166, 75)'
+                                    backgroundColor: firstColor,
+                                    flex: '1',
+                                    marginRight: '0.5em'
                                 }}
                             ></div>
                             <div
                                 style={{
                                     borderRadius: '3px',
                                     padding: '0.5em',
-                                    backgroundColor: 'rgb(255, 99, 71)' // example color
+                                    backgroundColor: secondColor,
+                                    flex: '1',
+                                    marginRight: '0.5em'
                                 }}
                             ></div>
                             <div
                                 style={{
                                     borderRadius: '3px',
                                     padding: '0.5em',
-                                    backgroundColor: 'rgb(30, 144, 255)' // example color
+                                    backgroundColor: thirdColor, 
+                                    flex: '1',
+                                    marginRight: '0.5em'
                                 }}
                             ></div>
                             <div
                                 style={{
                                     borderRadius: '3px',
                                     padding: '0.5em',
-                                    backgroundColor: 'rgb(255, 215, 0)' // example color
+                                    backgroundColor: fourthColor,
+                                    flex: '1',
+                                    marginRight: '0.5em'
                                 }}
                             ></div>
                             <div
                                 style={{
                                     borderRadius: '3px',
                                     padding: '0.5em',
-                                    backgroundColor: 'rgb(128, 0, 128)' // example color
+                                    backgroundColor: lastColor,
+                                    flex: '1'
                                 }}
                             ></div>
                         </div>
-                        <div style={{ display: 'flex', alignItems: 'stretch', justifyContent: 'space-between' }}>
-                            <span>Running</span>
-                            <span>Line Down</span>
-                            <span>Change Over</span>
-                            <span>No Plan</span>
-                            <span>NPD</span>
+                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '0.5em' }}>
+                            <span style={{ flex: '1', textAlign: 'center' }}>Running</span>
+                            <span style={{ flex: '1', textAlign: 'center' }}>Line Down</span>
+                            <span style={{ flex: '1', textAlign: 'center' }}>Change Over</span>
+                            <span style={{ flex: '1', textAlign: 'center' }}>No Plan</span>
+                            <span style={{ flex: '1', textAlign: 'center' }}>NPD</span>
                         </div>
                     </>
                     )}
@@ -227,21 +240,6 @@ export function mapData(series: Series[]) {
         .filter((x) => x) as SensorData[];
 }
 
-// export function mapData2(series: Series[]): SensorData[] {
-//     return series
-//     .map((s) => {
-//         const time = s.fields.find((x) => x.name === 'timestamp (last)')?.values?.get(0) as number ?? Date.now();;
-//         const sensorId = s.fields.find((x) => x.name === 'line');
-//         if (!sensorId) return null;
-//         const fieldValues = s.fields.find((x) => x.name === 'number (last)')?.values ?? [];
-//         const valueMap = new Map<string, number>();
-        
-//         valueMap.set('normalized', parseFloat(fieldValues[0]));
-        
-//         return { id: sensorId, values: valueMap, time: time } as unknown as SensorData;
-//     })
-//     .filter((x) => x) as SensorData[];
-// }
 export function mapData2(series: Series[]): SensorData[] {
     return series.flatMap((s) => {
         const timestamps = s.fields.find((x) => x.name === 'timestamp (last)')?.values as number[] ?? [];
@@ -285,7 +283,8 @@ function animateQualityTransition(
     container: SVGElement,
     rooms: Room[],
     roomMetrics: Map<string, { normalized: number; temperature: number; humidity: number }>,
-    intervalId: number
+    intervalId: number,
+    options: SimpleOptions
 ) {
     const redrawNeeded = rooms.filter((room) => {
         const metric = roomMetrics.get(room.name);
@@ -360,46 +359,6 @@ function animateQualityTransition(
                 // Append tspans to text element
                 textElement.appendChild(tempTspan);
                 textElement.appendChild(humTspan);
-            }
-        });
-    if (redrawNeeded.length === 0) {
-        clearInterval(intervalId);
-    }
-}
-
-function animateQualityTransition2(
-    id: number,
-    rainbow: Rainbow,
-    colors: Color[],
-    container: SVGElement,
-    rooms: Room[],
-    roomMetrics: Map<string, { normalized: number; temperature: number; humidity: number }>,
-    intervalId: number
-) {
-    const redrawNeeded = rooms.filter((room) => {
-        const metric = roomMetrics.get(room.name);
-        if (!metric) {
-            return false;
-        }
-        return metric.normalized !== room.quality;
-    });
-    redrawNeeded.forEach((room) => {
-        const desiredIAQ = roomMetrics.get(room.name)?.normalized;
-        if (desiredIAQ !== undefined) {
-            const difference = Math.abs(desiredIAQ - room.quality);
-            const add = desiredIAQ > room.quality ? 1 : -1;
-            room.quality += add * Math.min(difference, 1);
-        }
-    });
-    rooms
-        .filter((r) => roomMetrics.get(r.name))
-        .forEach((room) => {
-            const roomElement = container.querySelector(`#room\\:${room.name.replace(/\./g, '\\.')}`);
-
-            if (roomElement) {
-                createOrModifyRadialGradient(id, container, { name: rainbow.colorAt(room.quality), value: 0 }, room);
-                roomElement.setAttribute('fill', `url(#rg-${id}-${room.name})`);
-                roomElement.setAttribute('fill-opacity', '1');
             }
         });
     if (redrawNeeded.length === 0) {
