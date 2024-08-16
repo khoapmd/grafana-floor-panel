@@ -55,7 +55,7 @@ export const SimplePanel: React.FC<Props> = ({ options, data, width, height, fie
         setLastUpdate(now());
         //console.log('data.series')
         //console.log(data.series)
-        if(options.colorMode){
+        if(options.gradientMode){
             const measurements: SensorData[] = mapData(data.series as unknown as Series[]);
             //console.log(measurements)
             const sensorMappings: Map<string, string> = new Map(options.sensorMappings ? JSON.parse(options.sensorMappings) : []);
@@ -91,7 +91,7 @@ export const SimplePanel: React.FC<Props> = ({ options, data, width, height, fie
     clearInterval(interval.id);
     if (container) {
         interval.id = window.setInterval(() => {
-            //if(options.colorMode){
+            //if(options.gradientMode){
                 animateQualityTransition(id, rainbow, settings.colors, container, rooms, roomMetrics, interval.id, options)
             //}
             
@@ -150,7 +150,7 @@ export const SimplePanel: React.FC<Props> = ({ options, data, width, height, fie
 
             <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                 <div style={{ maxWidth: '500px', width: '80%' }}>
-                    {options.colorMode ? (
+                    {options.gradientMode ? (
                         <><div
                             style={{
                                 borderRadius: '3px',
@@ -336,8 +336,8 @@ function animateQualityTransition(
             const textElement = container.querySelector(`#${CSS.escape(room.name.replace(/\./g, "\\."))} tspan`);
             // const nameElement = container.querySelector(`#name${CSS.escape(room.name.replace(/\./g, "\\."))} tspan`);
             if (roomElement) {
-                if (options.colorMode) {
-                    // Use rainbow coloring for colorMode
+                if (options.gradientMode) {
+                    // Use rainbow coloring for gradientMode
                     createOrModifyRadialGradient(id, container, { name: rainbow.colorAt(room.quality), value: 0 }, room);
                     roomElement.setAttribute('fill', `url(#rg-${id}-${room.name})`);
                 } else {

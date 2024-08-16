@@ -3,5 +3,5 @@ export interface SimpleOptions {
     sensorMappings: string,
     scale: number,
     svg: string,
-    colorMode: boolean,
+    gradientMode: boolean,
 }
