@@ -336,8 +336,19 @@ function animateQualityTransition(
             const textElement = container.querySelector(`#${CSS.escape(room.name.replace(/\./g, "\\."))} tspan`);
             // const nameElement = container.querySelector(`#name${CSS.escape(room.name.replace(/\./g, "\\."))} tspan`);
             if (roomElement) {
-                createOrModifyRadialGradient(id, container, { name: rainbow.colorAt(room.quality), value: 0 }, room);
-                roomElement.setAttribute('fill', `url(#rg-${id}-${room.name})`);
+                if (options.colorMode) {
+                    // Use rainbow coloring for colorMode
+                    createOrModifyRadialGradient(id, container, { name: rainbow.colorAt(room.quality), value: 0 }, room);
+                    roomElement.setAttribute('fill', `url(#rg-${id}-${room.name})`);
+                } else {
+                    // Use direct coloring without rainbow
+                    const metric = roomMetrics.get(room.name);
+                    if (metric) {
+                        const colorIndex = Math.floor(metric.normalized);
+                        const color = colors[colorIndex] ? colors[colorIndex].name : 'grey';
+                        roomElement.setAttribute('fill', color);
+                    }
+                }
                 roomElement.setAttribute('fill-opacity', '1');
             }
             if (textElement) {
