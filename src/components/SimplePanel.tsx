@@ -125,12 +125,6 @@ export const SimplePanel: React.FC<Props> = ({ options, data, width, height, fie
     const fourthColor = getColor(colorsCount - 2);
     const lastColor = getColor(colorsCount - 1);
 
-    const colors = options.thresholds.steps.map(step => step.color);
-    const values = options.thresholds.steps.map(step => step.value);
-
-    console.log(colors)
-    console.log(values)
-
     return (
         <div
             style={{
@@ -352,12 +346,7 @@ function animateQualityTransition(
                     if (metric) {
                         const normalizedValue = metric.normalized;
                         let color = 'grey';  // Default color
-                        for (let i = 0; i < colors.length; i++) {
-                            if (normalizedValue <= colors[i].value * 100) {
-                                color = colors[i].name;
-                                break;
-                            }
-                        }
+                        color = getColorForValue(normalizedValue, colors);
                         roomElement.setAttribute('fill', color);
                     }
                 }
@@ -425,3 +414,26 @@ function createOrModifyRadialGradient(id: number, container: SVGElement, rightCo
     `;
 }
 
+function getColorForValue(normalizedValue: number, colors: Color[]){
+
+    // Ensure the colors array is not empty
+    if (colors.length === 0) {
+        return '#000000'; // Return a default color if the array is empty
+    }
+
+    // Calculate the index for the color
+    const index = Math.floor(normalizedValue / 20);
+
+    // Ensure the index is within the bounds of the colors array
+    if (index < 0) {
+        return colors[0].name; // Return the first color if index is out of bounds
+    }
+
+    if (index >= colors.length) {
+        return colors[colors.length - 1].name; // Return the last color if index is out of bounds
+    }
+
+    // Return the color at the calculated index
+    return colors[index].name;
+
+}
