@@ -172,7 +172,7 @@ export const SimplePanel: React.FC<Props> = ({ options, data, width, height, fie
                                     padding: '0.5em',
                                     backgroundColor: firstColor,
                                     flex: '1',
-                                    marginRight: '0.5em'
+                                    marginInline: '1em'
                                 }}
                             ></div>
                             <div
@@ -181,7 +181,7 @@ export const SimplePanel: React.FC<Props> = ({ options, data, width, height, fie
                                     padding: '0.5em',
                                     backgroundColor: secondColor,
                                     flex: '1',
-                                    marginRight: '0.5em'
+                                    marginInline: '1em'
                                 }}
                             ></div>
                             <div
@@ -190,7 +190,7 @@ export const SimplePanel: React.FC<Props> = ({ options, data, width, height, fie
                                     padding: '0.5em',
                                     backgroundColor: thirdColor, 
                                     flex: '1',
-                                    marginRight: '0.5em'
+                                    marginInline: '1em'
                                 }}
                             ></div>
                             <div
@@ -199,7 +199,7 @@ export const SimplePanel: React.FC<Props> = ({ options, data, width, height, fie
                                     padding: '0.5em',
                                     backgroundColor: fourthColor,
                                     flex: '1',
-                                    marginRight: '0.5em'
+                                    marginInline: '1em'
                                 }}
                             ></div>
                             <div
@@ -207,7 +207,8 @@ export const SimplePanel: React.FC<Props> = ({ options, data, width, height, fie
                                     borderRadius: '3px',
                                     padding: '0.5em',
                                     backgroundColor: lastColor,
-                                    flex: '1'
+                                    flex: '1',
+                                    marginInline: '1em'
                                 }}
                             ></div>
                         </div>
