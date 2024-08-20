@@ -7,7 +7,7 @@ export const plugin = new PanelPlugin<SimpleOptions>(SimplePanel)
         .useFieldConfig()
         .setPanelOptions(builder => {
             builder.addBooleanSwitch({
-                path: 'colorMode',
+                path: 'gradientMode',
                 name: 'Use Gradient Color',
                 defaultValue: true,
                 category: ["Floor Plan"],
