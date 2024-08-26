@@ -50,7 +50,7 @@ jobs:
       - name: Sign Grafana Plugin Private Mode
         env:
           GRAFANA_ACCESS_POLICY_TOKEN: ${{ secrets.GRAFANA_ACCESS_POLICY_TOKEN }}
-        run: npx @grafana/sign-plugin@latest --rootUrls http://vnsmterht01:3000
+        run: npx @grafana/sign-plugin@latest --rootUrls http://cnsbsts02:3000
 
       - name: Package and Push to Release
         run: |
