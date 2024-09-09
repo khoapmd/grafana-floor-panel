@@ -107,9 +107,9 @@ export const SimplePanel: React.FC<Props> = ({ options, data, width, height, fie
 
     const colorsCount = settings.colors?.length ?? 0;
 
-    const getColor = (index: number, defaultColor: string = 'grey') => {
-        return index >= 0 && index < colorsCount ? theme.visualization.getColorByName(settings.colors[index].name) : defaultColor;
-    };
+    // const getColor = (index: number, defaultColor: string = 'grey') => {
+    //     return index >= 0 && index < colorsCount ? theme.visualization.getColorByName(settings.colors[index].name) : defaultColor;
+    // };
 
     let firstColor;
     let secondColor;
@@ -117,16 +117,16 @@ export const SimplePanel: React.FC<Props> = ({ options, data, width, height, fie
     let fourthColor;
     let lastColor;
     if(colorsCount >= 5){
-        firstColor = getColor(0);
-        secondColor = getColor(colorsCount - 4);
-        thirdColor = getColor(colorsCount - 3);
-        fourthColor = getColor(colorsCount - 2);
-        lastColor = getColor(colorsCount - 1);
+        firstColor = getColor(0, settings.colors);
+        secondColor = getColor(colorsCount - 4, settings.colors);
+        thirdColor = getColor(colorsCount - 3, settings.colors);
+        fourthColor = getColor(colorsCount - 2, settings.colors);
+        lastColor = getColor(colorsCount - 1, settings.colors);
     }
     else{
-        firstColor = getColor(0);
-        secondColor = getColor(colorsCount - 2);
-        lastColor = getColor(colorsCount - 1);
+        firstColor = getColor(0, settings.colors);
+        secondColor = getColor(colorsCount - 2, settings.colors);
+        lastColor = getColor(colorsCount - 1, settings.colors);
     }
     
 
@@ -420,7 +420,7 @@ function createOrModifyRadialGradient(id: number, container: SVGElement, rightCo
 }
 
 function getColorForValue(normalizedValue: number, colors: Color[]) {
-    console.log(colors)
+    
     // Ensure the colors array is not empty
     if (colors.length === 0) {
         return '#000000'; // Return a default color if the array is empty
@@ -431,14 +431,22 @@ function getColorForValue(normalizedValue: number, colors: Color[]) {
 
     // Ensure the index is within the bounds of the colors array
     if (index < 0) {
-        return colors[0].name; // Return the first color if index is out of bounds
+        return getColor(0, colors); // Return the first color if index is out of bounds
     }
 
     if (index >= colors.length) {
-        return colors[colors.length - 1]; // Return the last color if index is out of bounds
+        return getColor(colors.length - 1, colors); // Return the last color if index is out of bounds
     }
 
     // Return the color at the calculated index
-    return colors[index].name;
+    return getColor(index, colors);
 
+}
+
+function getColor(index: number, colors: Color[], defaultColor: string = 'grey') {
+    let theme = useTheme2();
+    const colorsCount = colors?.length ?? 0;
+    return index >= 0 && index < colorsCount
+        ? theme.visualization.getColorByName(colors[index].name)
+        : defaultColor;
 }
