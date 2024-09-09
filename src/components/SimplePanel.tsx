@@ -431,7 +431,7 @@ function getColorForValue(normalizedValue: number, colors: Color[]) {
 
     // Ensure the index is within the bounds of the colors array
     if (index < 0) {
-        return colors[0]; // Return the first color if index is out of bounds
+        return colors[0].name; // Return the first color if index is out of bounds
     }
 
     if (index >= colors.length) {
@@ -439,6 +439,6 @@ function getColorForValue(normalizedValue: number, colors: Color[]) {
     }
 
     // Return the color at the calculated index
-    return colors[index];
+    return colors[index].name;
 
 }
