@@ -431,14 +431,14 @@ function getColorForValue(normalizedValue: number, colors: Color[]) {
 
     // Ensure the index is within the bounds of the colors array
     if (index < 0) {
-        return colors[0].value; // Return the first color if index is out of bounds
+        return colors[0]; // Return the first color if index is out of bounds
     }
 
     if (index >= colors.length) {
-        return colors[colors.length - 1].name; // Return the last color if index is out of bounds
+        return colors[colors.length - 1]; // Return the last color if index is out of bounds
     }
 
     // Return the color at the calculated index
-    return colors[index].value;
+    return colors[index];
 
 }
