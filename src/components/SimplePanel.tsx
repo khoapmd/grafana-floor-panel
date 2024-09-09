@@ -420,7 +420,7 @@ function createOrModifyRadialGradient(id: number, container: SVGElement, rightCo
 }
 
 function getColorForValue(normalizedValue: number, colors: Color[]) {
-
+    console.log(colors)
     // Ensure the colors array is not empty
     if (colors.length === 0) {
         return '#000000'; // Return a default color if the array is empty
