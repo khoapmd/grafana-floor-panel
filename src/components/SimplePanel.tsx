@@ -86,7 +86,7 @@ export const SimplePanel: React.FC<Props> = ({ options, data, width, height, fie
     clearInterval(interval.id);
     if (container) {
         interval.id = window.setInterval(() => {
-            animateQualityTransition(id, rainbow, settings.colors, container, rooms, roomMetrics, interval.id, options)
+            animateQualityTransition(id, rainbow, settings.colors, container, rooms, roomMetrics, interval.id, options, theme)
         }, 50);
     }
 
@@ -117,16 +117,16 @@ export const SimplePanel: React.FC<Props> = ({ options, data, width, height, fie
     let fourthColor;
     let lastColor;
     if(colorsCount >= 5){
-        firstColor = getColor(0, settings.colors);
-        secondColor = getColor(colorsCount - 4, settings.colors);
-        thirdColor = getColor(colorsCount - 3, settings.colors);
-        fourthColor = getColor(colorsCount - 2, settings.colors);
-        lastColor = getColor(colorsCount - 1, settings.colors);
+        firstColor = getColor(0, settings.colors, theme);
+        secondColor = getColor(colorsCount - 4, settings.colors, theme);
+        thirdColor = getColor(colorsCount - 3, settings.colors, theme);
+        fourthColor = getColor(colorsCount - 2, settings.colors, theme);
+        lastColor = getColor(colorsCount - 1, settings.colors, theme);
     }
     else{
-        firstColor = getColor(0, settings.colors);
-        secondColor = getColor(colorsCount - 2, settings.colors);
-        lastColor = getColor(colorsCount - 1, settings.colors);
+        firstColor = getColor(0, settings.colors, theme);
+        secondColor = getColor(colorsCount - 2, settings.colors, theme);
+        lastColor = getColor(colorsCount - 1, settings.colors, theme);
     }
     
 
@@ -295,7 +295,8 @@ function animateQualityTransition(
     rooms: Room[],
     roomMetrics: Map<string, { normalized: number; temperature: number; humidity: number }>,
     intervalId: number,
-    options: SimpleOptions
+    options: SimpleOptions,
+    theme: any
 ) {
     const redrawNeeded = rooms.filter((room) => {
         const metric = roomMetrics.get(room.name);
@@ -351,7 +352,7 @@ function animateQualityTransition(
                     if (metric) {
                         const normalizedValue = metric.normalized;
                         let color = 'grey';  // Default color
-                        color = getColorForValue(normalizedValue, colors);
+                        color = getColorForValue(normalizedValue, colors,theme);
                         roomElement.setAttribute('fill', color);
                     }
                 }
@@ -419,34 +420,23 @@ function createOrModifyRadialGradient(id: number, container: SVGElement, rightCo
     `;
 }
 
-function getColorForValue(normalizedValue: number, colors: Color[]) {
-    
-    // Ensure the colors array is not empty
-    if (colors.length === 0) {
-        return '#000000'; // Return a default color if the array is empty
-    }
-
-    // Calculate the index for the color
-    const index = Math.floor(normalizedValue / 25);
-
-    // Ensure the index is within the bounds of the colors array
-    if (index < 0) {
-        return getColor(0, colors); // Return the first color if index is out of bounds
-    }
-
-    if (index >= colors.length) {
-        return getColor(colors.length - 1, colors); // Return the last color if index is out of bounds
-    }
-
-    // Return the color at the calculated index
-    return getColor(index, colors);
-
-}
-
-function getColor(index: number, colors: Color[], defaultColor: string = 'grey') {
-    let theme = useTheme2();
+function getColor(index: number, colors: Color[], theme: any, defaultColor: string = 'grey') {
     const colorsCount = colors?.length ?? 0;
     return index >= 0 && index < colorsCount
         ? theme.visualization.getColorByName(colors[index].name)
         : defaultColor;
+}
+
+function getColorForValue(normalizedValue: number, colors: Color[], theme: any) {
+    if (colors.length === 0) {
+        return '#000000'; // Default color if the array is empty
+    }
+    const index = Math.floor(normalizedValue / 25);
+    if (index < 0) {
+        return getColor(0, colors, theme);
+    }
+    if (index >= colors.length) {
+        return getColor(colors.length - 1, colors, theme);
+    }
+    return getColor(index, colors, theme);
 }
