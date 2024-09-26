@@ -253,9 +253,9 @@ export function mapData(series: Series[]) {
 
 export function mapData2(series: Series[]): SensorData[] {
     return series.flatMap((s) => {
-        const timestamps = s.fields.find((x) => x.name === 'timestamp (first)')?.values as number[] ?? [];
+        const timestamps = s.fields.find((x) => x.name === 'timestamp')?.values as number[] ?? [];
         const sensorIds = s.fields.find((x) => x.name === 'line')?.values as string[] ?? [];
-        const fieldValues = s.fields.find((x) => x.name === 'number (first)')?.values as number[] ?? [];
+        const fieldValues = s.fields.find((x) => x.name === 'number')?.values as number[] ?? [];
 
         // Ensure all arrays are the same length
         const length = Math.min(timestamps.length, sensorIds.length, fieldValues.length);
