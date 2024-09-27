@@ -28,7 +28,7 @@ For proper functionality, sensor data should be provided in the following format
 ```
 sensor_id, _field, _time, _value, sensor_id
 ```
-[Example CSV](https://github.com/khoapmd/grafana-floor-panel/blob/main/sample/sample-data.csv)
+[InfluxDB Example CSV](https://github.com/khoapmd/grafana-floor-panel/blob/main/sample/influxdb-sample.csv)
 
 ## Sample Flux Query (InfluxDB)
 ```flux
@@ -40,6 +40,7 @@ from(bucket: "my_bucket")
   |> group(columns: ["sensor_id"])
   |> drop(columns: ["_start", "_stop", "_measurement", "location"])
 ```
+[Other SQL Example CSV](https://github.com/khoapmd/grafana-floor-panel/blob/main/sample/postgre-sample.csv)
 
 ## Sample Flux Query (PostgreSQL)
 ```sql
