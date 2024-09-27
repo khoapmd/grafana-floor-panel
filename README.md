@@ -1,6 +1,5 @@
 Here's a basic `README.md` structure for your project. It highlights the key features, setup instructions, usage, and technical details you've shared.
 
-```markdown
 # Floor Plan Indoor Environment Quality Monitoring
 
 ![Floor Plan IEQ Monitoring](https://github.com/khoapmd/grafana-floor-panel/blob/main/sample/floor-environment.png?raw=true)
@@ -23,12 +22,18 @@ This project provides indoor environment quality monitoring via a floor plan vis
 You can see a public demo of the dashboard here:
 [Public Dashboard](https://grafana.zerok.cloud/public-dashboards/1e7530530e5a4d01a604903b0379cbbc?orgId=1&refresh=30s)
 
-## Required Data Format
+## Required Data Format in Gradient Mode
 For proper functionality, sensor data should be provided in the following format (CSV):
 ```
-sensor_id, _field, _time, _value, sensor_id
+sensor_id, _field, _time, _value
 ```
 [Example CSV](https://github.com/khoapmd/grafana-floor-panel/blob/main/sample/sample-data.csv)
+
+## Required Data Format in Single Color Mode (Gradient is off)
+For proper functionality, the data should be provided in the following format:
+```
+line, timestamp, number
+```
 
 ## Sample Flux Query (InfluxDB)
 ```flux
@@ -51,10 +56,10 @@ FROM public.line_status
 ORDER BY line, timestamp DESC;
 ```
 
-## Normalization of Temperature and Humidity Data
+## Sample Flux Query (InfluxDB - Normalization of Temperature and Humidity Data)
 If your edge device doesn’t handle normalization, you can calculate normalized values with this Flux query:
 ```flux
-originalData = from(bucket: "BSTPRC")
+originalData = from(bucket: "SAMPLE")
   |> range(start: v.timeRangeStart, stop: v.timeRangeStop)
   |> filter(fn: (r) => r._measurement == "TEMPSENSOR")
   |> last()
@@ -113,6 +118,7 @@ You can view an example of the SVG floor plan used for visualization:
 - Room areas: id=`room:<room_name>` (e.g., `room:livingroom`)
 - Room labels: id=`name:<room_name>` (e.g., `name:livingroom`)
 - Room number labels: id=`roomname` (e.g., `livingroom`)
+  Note that when Gradient Mode is off, only room areas was displayed
 
 ## Building the Plugin with GitHub Actions
 
