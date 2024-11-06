@@ -233,48 +233,22 @@ export const SimplePanel: React.FC<Props> = ({ options, data, width, height, fie
 };
 
 export function mapData(series: Series[]) {
-    // return series
-    //     .map((s) => {
-    //         //const time = (s.fields.find((x) => x.name === '_time')?.values as number[])[0] ?? Date.now();
-    //         const time = s.fields.find((x) => x.name === '_time')?.values?.get(0) as number ?? Date.now();
-    //         const fieldOrder = s.fields.find((x) => x.name === '_field');
-    //         if (!fieldOrder) return null;
-    //         const fields = fieldOrder.values;
-    //         const sensorId = fieldOrder.labels.sensor_id;
-    //         const fieldValues = s.fields.find((x) => x.name === '_value')?.values ?? [];
-    //         const valueMap = new Map<string, number>();
-    //         for (let i = 0; i < fields.length; i++) {
-    //             valueMap.set(fields[i], parseFloat(fieldValues[i]));
-    //         }
-    //         return { id: sensorId, values: valueMap, time: time } as SensorData;
-    //     })
-    //     .filter((x) => x) as SensorData[];
-    const sensorDataMap = new Map<string, SensorData>();
-
-    series.forEach((s) => {
-        const time = s.fields.find((x) => x.name === '_time')?.values?.get(0) as number ?? Date.now();
-        const fieldOrder = s.fields.find((x) => x.name === '_field');
-        if (!fieldOrder) return;
-        
-        const fields = fieldOrder.values;
-        const sensorId = fieldOrder.labels.sensor_id;
-        const fieldValues = s.fields.find((x) => x.name === '_value')?.values ?? [];
-        
-        const valueMap = new Map<string, number>();
-        for (let i = 0; i < fields.length; i++) {
-            valueMap.set(fields[i], parseFloat(fieldValues[i]));
-        }
-
-        const newSensorData = { id: sensorId, values: valueMap, time: time } as SensorData;
-
-        // Store only the latest data for each sensorId
-        const existingData = sensorDataMap.get(sensorId);
-        if (!existingData || time > existingData.time) {
-            sensorDataMap.set(sensorId, newSensorData);
-        }
-    });
-
-    return Array.from(sensorDataMap.values());
+    return series
+        .map((s) => {
+            //const time = (s.fields.find((x) => x.name === '_time')?.values as number[])[0] ?? Date.now();
+            const time = s.fields.find((x) => x.name === '_time')?.values?.get(0) as number ?? Date.now();
+            const fieldOrder = s.fields.find((x) => x.name === '_field');
+            if (!fieldOrder) return null;
+            const fields = fieldOrder.values;
+            const sensorId = fieldOrder.labels.sensor_id;
+            const fieldValues = s.fields.find((x) => x.name === '_value')?.values ?? [];
+            const valueMap = new Map<string, number>();
+            for (let i = 0; i < fields.length; i++) {
+                valueMap.set(fields[i], parseFloat(fieldValues[i]));
+            }
+            return { id: sensorId, values: valueMap, time: time } as SensorData;
+        })
+        .filter((x) => x) as SensorData[];
 }
 
 export function mapData2(series: Series[]): SensorData[] {
