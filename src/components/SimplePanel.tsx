@@ -361,6 +361,7 @@ function animateQualityTransition(
         const escapedId = CSS.escape(`name:${room.name.replace(/\./g, "\\.")}`);
         const nameElement = container.querySelector(`#${escapedId} tspan`);
         const textElement = container.querySelector(`#${CSS.escape(room.name.replace(/\./g, "\\."))} tspan`);
+        const roomElement = container.querySelector(`#room\\:${room.name.replace(/\./g, '\\.')}`);
 
         if (!metric) {
             if (textElement && nameElement) {
@@ -373,8 +374,11 @@ function animateQualityTransition(
                 if (xValue !== null) {
                     disconnectedTspan.setAttribute('x', xValue);
                 }
-                nameElement.setAttribute("fill", "red"); // Set room name to red for disconnected state
-                textElement.appendChild(disconnectedTspan);
+                nameElement.setAttribute("fill", "red"); // Set room name to red
+            }
+            if (roomElement) {
+                roomElement.setAttribute('fill', 'transparent'); // Clear room color
+                roomElement.setAttribute('fill-opacity', '0.3'); // Make it semi-transparent
             }
             return false;
         }
