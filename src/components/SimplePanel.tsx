@@ -53,14 +53,14 @@ export const SimplePanel: React.FC<Props> = ({ options, data, width, height, fie
     }
 
     const updateRoomMetrics = () => {
+        // Force clean cache
+        roomMetrics.clear();
+        
         if (options.gradientMode) {
             const measurements: SensorData[] = mapData(data.series as unknown as Series[]);
             const sensorMappings: Map<string, string> = new Map(
                 options.sensorMappings ? JSON.parse(options.sensorMappings) : []
             );
-            
-            // Clear previous metrics
-            roomMetrics.clear();
             
             for (let sensorData of measurements) {
                 const room = sensorMappings.get(sensorData.id);
@@ -78,9 +78,6 @@ export const SimplePanel: React.FC<Props> = ({ options, data, width, height, fie
             const sensorMappings: Map<string, string> = new Map(
                 options.sensorMappings ? JSON.parse(options.sensorMappings) : []
             );
-
-            // Clear previous metrics
-            roomMetrics.clear();
             
             for (let sensorData of measurements) {
                 const room = sensorMappings.get(sensorData.id);
@@ -92,6 +89,24 @@ export const SimplePanel: React.FC<Props> = ({ options, data, width, height, fie
                 }
             }
         }
+
+        // Force refresh animation
+        if (container) {
+            clearInterval(interval.id);
+            interval.id = window.setInterval(() => {
+                animateQualityTransition(
+                    id,
+                    rainbow,
+                    settings.colors,
+                    container,
+                    rooms,
+                    roomMetrics,
+                    interval.id,
+                    options,
+                    theme
+                );
+            }, 50);
+        }
     };
 
     // Call the update function whenever data changes
@@ -100,7 +115,7 @@ export const SimplePanel: React.FC<Props> = ({ options, data, width, height, fie
     }, [data, options.gradientMode, options.sensorMappings]);
 
     // Modify the update interval to be more reasonable
-    const UPDATE_INTERVAL = 1000; // 1 second interval
+    const UPDATE_INTERVAL = 3000; // 3 seconds interval
 
     // Add this useEffect to handle regular updates
     React.useEffect(() => {
