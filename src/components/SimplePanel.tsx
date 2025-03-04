@@ -359,32 +359,28 @@ function animateQualityTransition(
     const redrawNeeded = rooms.filter((room) => {
         const metric = roomMetrics.get(room.name);
         const escapedId = CSS.escape(`name:${room.name.replace(/\./g, "\\.")}`);
-        // Find the element with the modified ID
         const nameElement = container.querySelector(`#${escapedId} tspan`);
         const textElement = container.querySelector(`#${CSS.escape(room.name.replace(/\./g, "\\."))} tspan`);
 
         if (!metric) {
             if (textElement && nameElement) {
-                // Clear existing content
+                // Handle disconnected state
                 textElement.innerHTML = '';
-                // Create tspan for temperature
-                const tempTspan = document.createElementNS('http://www.w3.org/2000/svg', 'tspan');
-                tempTspan.textContent = "No Data";
-                tempTspan.setAttribute("fill", "black");
+                const disconnectedTspan = document.createElementNS('http://www.w3.org/2000/svg', 'tspan');
+                disconnectedTspan.textContent = "Disconnected";
+                disconnectedTspan.setAttribute("fill", "red");
                 const xValue = textElement.getAttribute('x');
-                tempTspan.removeAttribute("x");
                 if (xValue !== null) {
-                    tempTspan.setAttribute('x', (parseFloat(xValue) - 0).toString());
+                    disconnectedTspan.setAttribute('x', xValue);
                 }
-                nameElement.setAttribute("fill", "black");
-                // Append tspans to text element
-                textElement.appendChild(tempTspan);
+                nameElement.setAttribute("fill", "red"); // Set room name to red for disconnected state
+                textElement.appendChild(disconnectedTspan);
             }
-
             return false;
         }
         return metric.normalized !== room.quality;
     });
+
     redrawNeeded.forEach((room) => {
         const desiredIAQ = roomMetrics.get(room.name)?.normalized;
         if (desiredIAQ !== undefined) {
@@ -398,7 +394,8 @@ function animateQualityTransition(
         .forEach((room) => {
             const roomElement = container.querySelector(`#room\\:${room.name.replace(/\./g, '\\.')}`);
             const textElement = container.querySelector(`#${CSS.escape(room.name.replace(/\./g, "\\."))} tspan`);
-            // const nameElement = container.querySelector(`#name${CSS.escape(room.name.replace(/\./g, "\\."))} tspan`);
+            const nameElement = container.querySelector(`#${CSS.escape(`name:${room.name.replace(/\./g, "\\.")}`)} tspan`);
+
             if (roomElement) {
                 if (options.gradientMode) {
                     // Use rainbow coloring for gradientMode
@@ -416,31 +413,36 @@ function animateQualityTransition(
                 }
                 roomElement.setAttribute('fill-opacity', '1');
             }
-            if (textElement) {
-                const temperature = roomMetrics.get(room.name)?.temperature.toFixed(2);
-                const humidity = roomMetrics.get(room.name)?.humidity.toFixed(2);
-                // Clear existing content
-                textElement.innerHTML = '';
-                // Create tspan for temperature
-                const tempTspan = document.createElementNS('http://www.w3.org/2000/svg', 'tspan');
-                // Create tspan for humidity
-                const humTspan = document.createElementNS('http://www.w3.org/2000/svg', 'tspan');
+            if (textElement && nameElement) {
+                const metric = roomMetrics.get(room.name);
+                if (metric) {
+                    const temperature = metric.temperature.toFixed(2);
+                    const humidity = metric.humidity.toFixed(2);
+                    
+                    // Clear existing content
+                    textElement.innerHTML = '';
+                    
+                    // Create tspan for temperature and humidity
+                    const tempTspan = document.createElementNS('http://www.w3.org/2000/svg', 'tspan');
+                    const humTspan = document.createElementNS('http://www.w3.org/2000/svg', 'tspan');
 
-                tempTspan.textContent = `${temperature}°C`;
-                humTspan.textContent = `${humidity}%`;
-                tempTspan.setAttribute('fill', 'while')
-                humTspan.setAttribute('fill', 'while');
+                    tempTspan.textContent = `${temperature}°C`;
+                    humTspan.textContent = `${humidity}%`;
+                    tempTspan.setAttribute('fill', 'white');
+                    humTspan.setAttribute('fill', 'white');
+                    nameElement.setAttribute('fill', 'white'); // Set room name to white when connected
 
-                // Set the x attribute of humTspan to be the same as tempTspan
-                const xValue = textElement.getAttribute('x');
-                if (xValue !== null) {
-                    humTspan.setAttribute('x', xValue);
+                    // Set positions
+                    const xValue = textElement.getAttribute('x');
+                    if (xValue !== null) {
+                        humTspan.setAttribute('x', xValue);
+                    }
+                    humTspan.setAttribute('dy', '1.2em');
+
+                    // Append tspans
+                    textElement.appendChild(tempTspan);
+                    textElement.appendChild(humTspan);
                 }
-                humTspan.setAttribute('dy', '1.2em'); // Move to the next line
-
-                // Append tspans to text element
-                textElement.appendChild(tempTspan);
-                textElement.appendChild(humTspan);
             }
         });
     if (redrawNeeded.length === 0) {
