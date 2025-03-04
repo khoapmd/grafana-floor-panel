@@ -99,10 +99,37 @@ export const SimplePanel: React.FC<Props> = ({ options, data, width, height, fie
         updateRoomMetrics();
     }, [data, options.gradientMode, options.sensorMappings]);
 
+    // Modify the update interval to be more reasonable
+    const UPDATE_INTERVAL = 1000; // 1 second interval
+
+    // Add this useEffect to handle regular updates
+    React.useEffect(() => {
+        const updateTimer = setInterval(() => {
+            if (now() - lastUpdate > UPDATE_INTERVAL) {
+                setLastUpdate(now());
+                updateRoomMetrics();
+            }
+        }, UPDATE_INTERVAL);
+
+        // Cleanup on unmount
+        return () => clearInterval(updateTimer);
+    }, [data, options.gradientMode, options.sensorMappings]);
+
+    // Keep the animation interval at 50ms for smooth transitions
     clearInterval(interval.id);
     if (container) {
         interval.id = window.setInterval(() => {
-            animateQualityTransition(id, rainbow, settings.colors, container, rooms, roomMetrics, interval.id, options, theme)
+            animateQualityTransition(
+                id, 
+                rainbow, 
+                settings.colors, 
+                container, 
+                rooms, 
+                roomMetrics, 
+                interval.id, 
+                options, 
+                theme
+            );
         }, 50);
     }
 
