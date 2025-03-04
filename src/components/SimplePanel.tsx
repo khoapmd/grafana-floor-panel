@@ -37,7 +37,9 @@ export const SimplePanel: React.FC<Props> = ({ options, data, width, height, fie
             name: x.color,
             value: Math.max(x.value, 0),
         }));
-        settings.colors = colors.sort((a, b) => a.value - b.value);
+        if (colors) {
+            settings.colors = colors.sort((a, b) => a.value - b.value);
+        }
     }
     rainbow.setSpectrumByArray(settings.colors.map((x) => theme.visualization.getColorByName(x.name)));
     const all: Room[] = parseRooms(options.svg).map((name) => ({
@@ -50,11 +52,16 @@ export const SimplePanel: React.FC<Props> = ({ options, data, width, height, fie
         setRooms(all);
     }
 
-    if (now() - lastUpdate > 3000) {
-        setLastUpdate(now());
+    const updateRoomMetrics = () => {
         if (options.gradientMode) {
             const measurements: SensorData[] = mapData(data.series as unknown as Series[]);
-            const sensorMappings: Map<string, string> = new Map(options.sensorMappings ? JSON.parse(options.sensorMappings) : []);
+            const sensorMappings: Map<string, string> = new Map(
+                options.sensorMappings ? JSON.parse(options.sensorMappings) : []
+            );
+            
+            // Clear previous metrics
+            roomMetrics.clear();
+            
             for (let sensorData of measurements) {
                 const room = sensorMappings.get(sensorData.id);
                 if (!room) continue;
@@ -66,10 +73,15 @@ export const SimplePanel: React.FC<Props> = ({ options, data, width, height, fie
                     roomMetrics.set(room, { normalized, temperature, humidity });
                 }
             }
-        }
-        else {
+        } else {
             const measurements: SensorData[] = mapData2(data.series as unknown as Series[]);
-            const sensorMappings: Map<string, string> = new Map(options.sensorMappings ? JSON.parse(options.sensorMappings) : []);
+            const sensorMappings: Map<string, string> = new Map(
+                options.sensorMappings ? JSON.parse(options.sensorMappings) : []
+            );
+
+            // Clear previous metrics
+            roomMetrics.clear();
+            
             for (let sensorData of measurements) {
                 const room = sensorMappings.get(sensorData.id);
                 if (!room) continue;
@@ -80,8 +92,12 @@ export const SimplePanel: React.FC<Props> = ({ options, data, width, height, fie
                 }
             }
         }
+    };
 
-    }
+    // Call the update function whenever data changes
+    React.useEffect(() => {
+        updateRoomMetrics();
+    }, [data, options.gradientMode, options.sensorMappings]);
 
     clearInterval(interval.id);
     if (container) {
@@ -91,7 +107,7 @@ export const SimplePanel: React.FC<Props> = ({ options, data, width, height, fie
     }
 
     const svgRef = useCallback(
-        (node) => {
+        (node: HTMLElement | null) => {
             if (node instanceof HTMLElement) {
                 node.innerHTML = DOMPurify.sanitize(options.svg);
                 const svg = node.getElementsByTagName('svg')[0];
