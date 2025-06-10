@@ -368,7 +368,7 @@ function animateQualityTransition(
                 // Handle disconnected state
                 textElement.innerHTML = '';
                 const disconnectedTspan = document.createElementNS('http://www.w3.org/2000/svg', 'tspan');
-                disconnectedTspan.textContent = "Disconnected ";
+                disconnectedTspan.textContent = "Disconnected";
                 disconnectedTspan.setAttribute("fill", "red");
                 const xValue = textElement.getAttribute('x');
                 if (xValue !== null) {
